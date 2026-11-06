@@ -381,3 +381,248 @@ Local validation results:
 - Live local MCP client check on 2026-11-05 (America/New_York), 2026-11-06T04:01:39 UTC: whosamyy/one-bullet, main, commit 39e9a2c9e5f3e669e704a3285a869321ffca79c5. SPEC.md, README.md, and prompt_log.md found; definitely-not-a-real-file.txt missing; no errors or unverified paths.
 - Live invalid-host URL returned a validation error. Nonexistent repository whosamyy/submit-bear-nonexistent-test-20261105-8f23 returned HTTP 404 with all paths unverified and no paths classified missing.
 - pip check reported no broken requirements. Codex registration and in-Codex tool invocation have not been attempted.
+
+## Bear Inspector iteration — current Bear Fetch guidance
+
+Date: 2026-11-06
+AI tool: OpenAI Codex
+Model: GPT-6-based Codex agent; exact backend model identifier is not exposed in this session.
+Use: Correct the outdated Bear Fetch availability instruction and validate skill format and preservation of existing rules. Fresh-session behavior has not been retested.
+
+User prompt (verbatim, including IDE context):
+
+```text
+# Context from my IDE setup:
+
+## Active file: prompt_log.md
+
+## Open tabs:
+- prompt_log.md: prompt_log.md
+
+## My request:
+I'm continuing CMU HW8 with Submit Bear.
+
+My first combined demonstration successfully used Bear Inspector and the actual Bear Fetch MCP tool on One Bullet.
+
+However, the independent checker found a real issue in my skill:
+
+The current `SKILL.md` still says "Bear Fetch is not currently implemented," even though Bear Fetch is now implemented, registered, and successfully invoked.
+
+I want to fix this inconsistency as a small, evidence-based iteration.
+
+### Task
+
+1. Read `.agents/skills/bear-inspector/SKILL.md`.
+2. Find the outdated instruction about Bear Fetch not being implemented.
+3. Replace it with accurate conditional guidance:
+   - If `check_public_repo` is available, invoke the actual Bear Fetch MCP tool for remote GitHub verification.
+   - If it is unavailable, report remote verification as UNVERIFIED.
+   - Never substitute assumptions about local Git status for remote evidence.
+   - Clearly distinguish repository file presence from the correctness of file contents.
+4. Keep all existing checking behavior, statuses, and report formatting unchanged.
+5. Keep the skill read-only.
+
+### Validation
+
+- Run the skill-format validator.
+- Verify the outdated statement is gone.
+- Verify the skill still includes all original evidence-checking rules.
+- Do not claim the improvement works in a fresh session yet. I will independently retest it afterward.
+
+### Restrictions
+
+- Modify only `SKILL.md` and `prompt_log.md`.
+- Do not change the Bear Fetch MCP server.
+- Do not modify previous homework repositories.
+- Do not create README.md, DEMONSTRATION.md, or ITERATION.md.
+- Do not commit or push.
+
+Append this prompt verbatim to `prompt_log.md`.
+
+When finished, report exactly what changed and provide a prompt for independently retesting the updated skill.
+
+Then STOP.
+```
+
+
+## Bear Mood System
+
+AI tool: OpenAI Codex
+Model: GPT-6-based Codex agent; exact backend model identifier is not exposed in this session.
+
+User prompt (verbatim, including IDE context):
+
+```text
+# Context from my IDE setup:
+
+## Active file: prompt_log.md
+
+## Open tabs:
+- prompt_log.md: prompt_log.md
+
+## My request:
+I want to make my Submit Bear HW8 project cuter by giving Bear Inspector a bear mascot whose mood reflects the submission-readiness results.
+
+Please update `.agents/skills/bear-inspector/SKILL.md`.
+
+### Feature: Bear Mood System
+
+At the top of every Bear Inspector report, display one of three bear moods:
+
+**1. Sleeping Bear — ʕ－ᴥ－ʔ 💤**
+
+- When all mandatory requirements are COMPLETE and there are no relevant UNVERIFIED checks.
+- Message: "Zzz... everything looks ready! Your bear can finally rest."
+
+**2. Worried Bear — ʕ•́ᴥ•̀ʔ 🥺**
+
+- When no mandatory requirement is confirmed MISSING, but at least one important check is UNVERIFIED.
+- Message: "Hmm... I'm not sure about a few things. Let's double-check!"
+
+**3. Crying Bear — ʕಥᴥಥʔ 💧**
+
+- When at least one mandatory submission requirement is confirmed MISSING.
+- Message: "Oh no! We're missing something important. Let's fix it!"
+
+### Important behavior
+
+1. Determine the bear's mood automatically from the actual inspection findings.
+2. A missing feature that is explicitly deferred or outside the assignment scope should NOT trigger Crying Bear.
+3. If both mandatory MISSING and UNVERIFIED findings exist, Crying Bear takes priority.
+4. If the assignment scope itself is uncertain, don't show Sleeping Bear.
+5. Keep the existing COMPLETE, MISSING, and UNVERIFIED classifications.
+6. Preserve the detailed evidence, remaining actions, top-three priorities, and overall readiness conclusion.
+7. The cute mascot must NEVER make the report less accurate or hide problems.
+8. Keep the report professional and readable, with the bear adding a little personality.
+
+### Example report header
+
+🐻 Submit Bear — Inspection Report
+
+ʕ•́ᴥ•̀ʔ 🥺 Worried Bear
+
+"Hmm... I'm not sure about a few things. Let's double-check!"
+
+Project: One Bullet\
+Overall readiness: UNVERIFIED
+
+[Continue with the existing detailed inspection report.]
+
+### Scope
+
+- Only update the Bear Inspector skill and append this prompt verbatim to prompt_log.md.
+- Do not modify Bear Fetch or its MCP registration.
+- Do not modify my previous homework repositories.
+- Do not write my HW8 documentation files.
+- Do not commit or push.
+
+Validate the skill after editing.
+
+Explain what changed, then STOP.
+```
+
+
+## Requirement classification improvement
+
+```text
+# Context from my IDE setup:
+
+## Active file: prompt_log.md
+
+## Open tabs:
+- prompt_log.md: prompt_log.md
+
+## My request:
+I want to make a small improvement to my Submit Bear HW8 project.
+
+In my latest Bear Inspector report for One Bullet, unfinished features like enemies, health, and scoring were marked UNVERIFIED, even though the code clearly shows they are not implemented.
+
+I want Bear Inspector to distinguish **whether a feature exists** from **whether that feature is required for the current submission**.
+
+### Task
+
+Update `.agents/skills/bear-inspector/SKILL.md` to improve requirement classification.
+
+### New classification rules
+
+**COMPLETE**
+
+- The requirement is supported by sufficient evidence at the stated verification level.
+- Continue distinguishing code inspection from actual runtime testing.
+
+**MISSING**
+
+- Evidence confirms the feature, file, or requirement is absent.
+- If the feature is explicitly deferred or outside the current assignment scope, label it:\
+  `MISSING — outside current submission scope`
+- Do NOT treat an out-of-scope missing feature as a submission blocker.
+
+**UNVERIFIED**
+
+- There is insufficient evidence to determine whether something exists, works, or meets the requirement.
+- Use this when the implementation or testing cannot be confirmed.
+- Do NOT use UNVERIFIED simply because a feature is known to be missing but intentionally deferred.
+
+### Bear Mood Rules
+
+Preserve the existing bear mascot system:
+
+- 💤 Sleeping Bear: All mandatory submission requirements are COMPLETE, with no important verification gaps.
+- 🥺 Worried Bear: No mandatory requirement is confirmed missing, but important checks remain UNVERIFIED.
+- 💧 Crying Bear: At least one mandatory submission requirement is confirmed MISSING.
+
+Important:
+
+- Missing features explicitly outside the current submission scope must NEVER trigger Crying Bear.
+- If submission scope is unclear, report that uncertainty and do not automatically treat every missing full-project feature as mandatory.
+- If both required missing features and unverified checks exist, Crying Bear takes priority.
+- Never show Sleeping Bear while important submission requirements remain unverified.
+
+### Example: One Bullet
+
+Its Phase 1 assignment intentionally deferred:
+
+- Enemy spawning and chasing
+- Enemy kills
+- Health
+- Collision damage
+- Scoring
+- Game over
+
+These should be reported as `MISSING — outside Phase 1 scope`, not UNVERIFIED.
+
+Browser testing, automated test execution, and the full course submission requirements can remain UNVERIFIED when sufficient evidence is unavailable.
+
+The expected overall result is still Worried Bear because testing and submission evidence remain unverified.
+
+### Important constraints
+
+1. Preserve all existing Bear Inspector functionality.
+2. Keep the COMPLETE, MISSING, and UNVERIFIED statuses.
+3. Keep evidence citations and remaining-action recommendations.
+4. Keep Bear Fetch integration unchanged.
+5. Do not make the checker more lenient about genuinely mandatory requirements.
+6. Do not assume a feature is out of scope without supporting assignment instructions or an explicitly documented scope. If scope is uncertain, explain that separately.
+7. Keep the skill read-only.
+
+### Files
+
+Only modify:
+
+- `.agents/skills/bear-inspector/SKILL.md`
+- `prompt_log.md` (append this prompt verbatim)
+
+Do not modify Bear Fetch, previous homework repositories, or my HW8 documentation files.
+
+Do not commit or push.
+
+### Validation
+
+1. Run the skill validator.
+2. Check that the classification rules are consistent.
+3. Confirm the bear mood rules still work.
+4. Provide a short fresh-session test prompt for One Bullet.
+5. Do not claim the new behavior works until independently tested.
+
+Report what changed, then STOP.
+```
