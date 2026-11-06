@@ -9,13 +9,13 @@ There are two parts: **Bear Inspector**, a Codex skill that reviews a project, a
 I went back through my prompt logs from previous homework assignments. A few things kept coming up:
 
 > "have u been updating prompt log"  
-> — [HW7 Sonar Diver prompt log](https://github.com/whosamyy/hw7-coop-card-game/blob/main/prompt_log.md), around line 957
+> — [HW7 Sonar Diver prompt log](https://github.com/whosamyy/hw7-coop-card-game/blob/main/prompt_log.md), line 971
 
-> "Do not claim browser testing passed unless you actually tested it in a browser"  
-> — HW7 Sonar Diver prompt log, around line 632
+> "Do not claim browser testing passed unless you actually tested it in a browser."
+> — HW7 Sonar Diver prompt log, line 632
 
-> "Do not rewrite unrelated code"  
-> — HW6 Idea Originality Checker prompt log, around line 1640
+> "Do not rewrite unrelated code."
+> — HW6 Idea Originality Checker prompt log, line 1640
 
 The first one was an actual case where a prompt hadn't been logged yet. The other two are instructions I kept emphasizing, not proof that the agent definitely broke those rules. Still, it made me want a separate checker instead of repeatedly reminding the same coding agent what to look for.
 
@@ -100,7 +100,7 @@ The setup below is what I tested. Other agent clients may use different skill di
 For repeatable automated tests, I used the tests in `tests/test_bear_fetch.py`. With the virtual environment active:
 
 ```bash
-python -m pytest tests/test_bear_fetch.py
+python -m unittest discover -s tests -v
 ```
 
 ## What I tested

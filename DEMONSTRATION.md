@@ -15,22 +15,54 @@ I first tested Bear Inspector alone in a fresh session. It read `SPEC.md`, `READ
 
 Next I registered Bear Fetch and verified that Codex could invoke it. My direct MCP test used:
 
-```text
-Tool: bear-fetch.check_public_repo
-Repo: https://github.com/whosamyy/one-bullet
-Paths: SPEC.md, README.md, prompt_log.md,
-       definitely-not-a-real-file.txt
+Saved session: `rollout-2026-11-06T01-30-15-01a1af8c-fe38-7003-8d1c-cc5bc986f7db.jsonl`. The invocation below is copied from its MCP event; the response is the saved tool output.
+
+```json
+{
+  "server": "bear-fetch",
+  "tool": "check_public_repo",
+  "arguments": {
+    "repo_url": "https://github.com/whosamyy/one-bullet",
+    "required_paths": [
+      "SPEC.md",
+      "README.md",
+      "prompt_log.md",
+      "definitely-not-a-real-file.txt"
+    ]
+  }
+}
+```
+
+```json
+{
+  "repository": "whosamyy/one-bullet",
+  "ref": "main",
+  "remote_commit_sha": "39e9a2c9e5f3e669e704a3285a869321ffca79c5",
+  "checked_at": "2026-11-06T06:30:25.009309+00:00",
+  "found": [
+    "SPEC.md",
+    "README.md",
+    "prompt_log.md"
+  ],
+  "missing": [
+    "definitely-not-a-real-file.txt"
+  ],
+  "unverified": [],
+  "errors": [],
+  "limitations": [
+    "Checks regular-file presence only, not contents or correctness."
+  ]
+}
 ```
 
 The actual response reported `main` at `39e9a2c9e5f3e669e704a3285a869321ffca79c5`, with the first three paths **found** and the fake path **missing**. There were no errors or unverified paths.
 
-Then I ran the full checker in a fresh Codex chat using `$bear-inspector` and asked it to use Bear Fetch. This is a shortened excerpt of its output:
+Then I ran the full checker in a fresh Codex chat using `$bear-inspector` and asked it to use Bear Fetch. These are verbatim lines from its report (intervening rows omitted), saved in `rollout-2026-11-06T01-31-40-01a1af8e-4bcc-7ce2-abf4-ac3f8ac7aec2.jsonl`:
 
 ```text
-Bear Inspector loaded: Yes
-Bear Fetch invoked: mcp__bear_fetch__check_public_repo
-Local HEAD matches remote: Yes
-Overall readiness: Readiness unverified
+| AC1: movement implementation | COMPLETE | [input.js](/Users/whosamy/Documents/hw7-one-bullet/src/input.js:4) maps WASD/arrows; [player.js](/Users/whosamy/Documents/hw7-one-bullet/src/player.js:9) normalizes movement and clamps boundaries. **Code inspection.** | None for this requirement |
+| Actual browser testing and runnable behavior | UNVERIFIED | README reports Chrome testing and describes checks, but supplies no revision-linked transcript or artifact. **Historical documentation claim**, not independently demonstrated browser testing. | Record browser results for movement, firing lockout, wall pickup, and repeated refiring. |
+**Overall readiness: Readiness unverified.** The Phase 1 implementation and documentation are supported by inspection, and the latest local commit is verified remotely. No mandatory Phase 1 omission was established. Execution evidence and the complete assignment rubric remain unverified; intentionally deferred features are not submission blockers under your stated scope.
 ```
 
 It marked the Phase 1 mechanics as supported by code inspection. More importantly, it did **not** treat the unfinished full-game systems as automatic blockers for a Phase 1 handoff. The main gaps were evidence for `node --test`, a browser playthrough, and the complete course submission checklist.
@@ -55,12 +87,31 @@ This time I separated the work into **two fresh Codex sessions**.
 
 ### Session A — MCP call
 
-I asked an agent to call the actual `check_public_repo` MCP tool for the Sonar Diver repo. The saved output included:
+I asked an agent to call the actual `check_public_repo` MCP tool for the Sonar Diver repo. The invocation is saved in `rollout-2026-11-06T01-41-08-01a1af96-f5da-72a0-8a6a-085a31a5cc6c.jsonl`:
+
+```json
+{
+  "server": "bear-fetch",
+  "tool": "check_public_repo",
+  "arguments": {
+    "repo_url": "https://github.com/whosamyy/hw7-coop-card-game",
+    "required_paths": [
+      "spec.md",
+      "README.md",
+      "prompt_log.md",
+      "HANDOFF_REPORT.md"
+    ]
+  }
+}
+```
+
+The saved output included:
 
 ```json
 {
   "repository": "whosamyy/hw7-coop-card-game",
   "ref": "main",
+  "checked_at": "2026-11-06T06:41:26.030054+00:00",
   "remote_commit_sha": "ac72e409861c540db922d153a675b8a1f2573174",
   "found": ["spec.md", "README.md", "prompt_log.md", "HANDOFF_REPORT.md"],
   "missing": [],
@@ -78,7 +129,14 @@ I started another new Codex session, provided Session A's result, and invoked `$
 
 It loaded the skill and made **another real Bear Fetch call**, rather than just trusting the JSON I pasted. Its results matched Session A and local HEAD. It also checked additional remote paths, including `game.js`, `index.html`, `style.css`, and an asset file.
 
-Some examples from the report:
+Verbatim lines from the scoped follow-up report in `rollout-2026-11-06T01-42-34-01a1af98-4370-7360-90e6-cd9f89e9ed27.jsonl` (intervening rows omitted):
+
+```text
+| #20 Abilities | COMPLETE | **Code inspection:** three selections, specified effects/cooldowns, invalid-Blink handling, activation guards, Shield consumption, and reset, lines 157–201, 355–358, 599–602, 646–647. | None for this requirement. |
+**Overall readiness: Readiness unverified for the inherited HW7 Phase 2 submission.** Required repository documents and targeted development are present, and remote publication is verified. Runtime and some assignment-compliance evidence remain incomplete. Missing deferred full-game features alone do not establish that this scoped submission is “Not ready.” The full intended game remains unfinished.
+```
+
+Some examples from the report (summarized):
 
 | Check | Result | Why |
 | --- | --- | --- |
